@@ -1,6 +1,7 @@
 module Api
   module V1
-    class TracksController < BaseController
+    class TracksController < ApplicationController
+      before_action :authenticate_user!
       before_action :set_playlist
       before_action :set_track, only: [:show, :update, :destroy]
 

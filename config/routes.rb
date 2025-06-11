@@ -1,25 +1,28 @@
 Rails.application.routes.draw do
-  # Skip default Devise controllers, since we’re using custom JWT-based auth
-  devise_for :users, skip: [:sessions, :registrations, :passwords]
-
   namespace :api do
     namespace :v1 do
-      # Custom auth endpoints for JWT
-      devise_scope :user do
-        post '/sign_in', to: 'sessions#create'
-        delete '/sign_out', to: 'sessions#destroy'
-        post '/sign_up', to: 'registrations#create'
-      end
+      devise_for :users,
+                 controllers: {
+                   sessions: 'api/v1/sessions',
+                   registrations: 'api/v1/registrations'
+                 },
+                 path: '',
+                 path_names: {
+                   sign_in: 'users/sign_in',
+                   sign_out: 'users/sign_out',
+                   registration: 'users'
+                 },
+                 defaults: { format: :json } # <- Add this!
 
       # UserConnections: manage OAuth credentials per provider
       resources :user_connections, only: [:index, :show, :create, :update, :destroy]
 
       # Playlists and nested tracks
       resources :playlists, only: [:index, :show, :create, :update, :destroy] do
-        resources :tracks, only: [:index, :create] # Nested: tracks within a playlist
+        resources :tracks, only: [:index, :create]
       end
 
-      # Top-level access to tracks (e.g. search, global list)
+      # Top-level access to tracks
       resources :tracks, only: [:show, :update, :destroy]
 
       # Spotify OAuth routes

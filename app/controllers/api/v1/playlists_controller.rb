@@ -1,6 +1,7 @@
 module Api
   module V1
-    class PlaylistsController < BaseController
+    class PlaylistsController < ApplicationController
+      before_action :authenticate_user!
       before_action :set_playlist, only: [:show, :update, :destroy]
 
       # GET /api/v1/playlists

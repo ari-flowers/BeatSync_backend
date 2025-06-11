@@ -1,6 +1,7 @@
 module Api
   module V1
-    class UserConnectionsController < BaseController
+    class UserConnectionsController < ApplicationController
+      before_action :authenticate_user!
       before_action :set_user_connection, only: [:show, :update, :destroy]
 
       # GET /api/v1/user_connections
