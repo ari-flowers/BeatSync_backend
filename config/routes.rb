@@ -1,8 +1,16 @@
 Rails.application.routes.draw do
-  devise_for :users
+  # Skip default Devise controllers, since we’re using custom JWT-based auth
+  devise_for :users, skip: [:sessions, :registrations, :passwords]
 
   namespace :api do
     namespace :v1 do
+      # Custom auth endpoints for JWT
+      devise_scope :user do
+        post '/sign_in', to: 'sessions#create'
+        delete '/sign_out', to: 'sessions#destroy'
+        post '/sign_up', to: 'registrations#create'
+      end
+
       # UserConnections: manage OAuth credentials per provider
       resources :user_connections, only: [:index, :show, :create, :update, :destroy]
 
