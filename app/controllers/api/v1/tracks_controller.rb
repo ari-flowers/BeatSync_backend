@@ -4,23 +4,28 @@ module Api
       before_action :set_playlist
       before_action :set_track, only: [:show, :update, :destroy]
 
+      # GET /api/v1/playlists/:playlist_id/tracks
       def index
-        render json: @playlist.tracks
+        @tracks = @playlist.tracks
+        render json: @tracks
       end
 
+      # GET /api/v1/playlists/:playlist_id/tracks/:id
       def show
         render json: @track
       end
 
+      # POST /api/v1/playlists/:playlist_id/tracks
       def create
-        track = @playlist.tracks.new(track_params)
-        if track.save
-          render json: track, status: :created
+        @track = @playlist.tracks.new(track_params)
+        if @track.save
+          render json: @track, status: :created
         else
-          render json: track.errors, status: :unprocessable_entity
+          render json: @track.errors, status: :unprocessable_entity
         end
       end
 
+      # PATCH/PUT /api/v1/playlists/:playlist_id/tracks/:id
       def update
         if @track.update(track_params)
           render json: @track
@@ -29,6 +34,7 @@ module Api
         end
       end
 
+      # DELETE /api/v1/playlists/:playlist_id/tracks/:id
       def destroy
         @track.destroy
         head :no_content
