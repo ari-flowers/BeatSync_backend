@@ -1,36 +1,47 @@
 module Api
   module V1
-    class TracksController < ApplicationController
-      before_action :set_track, only: [:show, :update, :destroy]
+    class TracksController < BaseController
+      before_action :set_oauth_service
 
-      # GET /api/v1/tracks/:id
-      def show
-        render json: @track
-      end
+      def index
+        playlist_id = params[:playlist_id]
+        limit = params[:limit]&.to_i || 50
+        offset = params[:offset]&.to_i || 0
 
-      # PATCH/PUT /api/v1/tracks/:id
-      def update
-        if @track.update(track_params)
-          render json: @track
-        else
-          render json: @track.errors, status: :unprocessable_entity
+        if playlist_id.blank?
+          return render json: { error: 'Missing playlist_id' }, status: :bad_request
         end
-      end
 
-      # DELETE /api/v1/tracks/:id
-      def destroy
-        @track.destroy
-        head :no_content
+        track_data = @oauth_service.get_playlist_tracks(
+          playlist_id: playlist_id,
+          limit: limit,
+          offset: offset
+        )
+
+        if track_data[:error]
+          render json: { error: track_data[:error] }, status: :bad_request
+        else
+          render json: track_data
+        end
       end
 
       private
 
-      def set_track
-        @track = Track.find(params[:id])
-      end
+      def set_oauth_service
+        provider = params[:provider] || 'spotify'
+        connection = OAuthConnection.find_by(provider: provider)
 
-      def track_params
-        params.require(:track).permit(:name, :spotify_id, :artist_name, :duration_ms, :image_url)
+        unless connection&.access_token
+          render json: { error: "#{provider.titleize} not connected" }, status: :unauthorized and return
+        end
+
+        @oauth_service =
+          case provider
+          when 'spotify'
+            ::Oauth::SpotifyService.new
+          else
+            render json: { error: 'Unsupported provider' }, status: :bad_request and return
+          end
       end
     end
   end

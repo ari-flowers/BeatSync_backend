@@ -106,6 +106,12 @@ GEM
     drb (2.2.3)
     erb (5.0.1)
     erubi (1.13.1)
+    faraday (2.13.1)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.1)
+      net-http (>= 0.5.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     httparty (0.23.1)
@@ -119,6 +125,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    json (2.12.2)
     jsonapi-renderer (0.2.2)
     logger (1.7.0)
     loofah (2.24.1)
@@ -136,6 +143,8 @@ GEM
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
     mutex_m (0.3.0)
+    net-http (0.6.0)
+      uri
     net-imap (0.5.8)
       date
       net-protocol
@@ -213,6 +222,7 @@ GEM
     timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uri (1.0.3)
     websocket-driver (0.8.0)
       base64
       websocket-extensions (>= 0.1.0)
@@ -229,6 +239,7 @@ DEPENDENCIES
   bootsnap
   debug
   dotenv-rails
+  faraday
   httparty
   pg (~> 1.1)
   puma (>= 5.0)
