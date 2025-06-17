@@ -6,7 +6,7 @@ class CreateUserConnections < ActiveRecord::Migration[7.1]
       t.string :access_token
       t.string :refresh_token
       t.datetime :expires_at
-      t.references :user, null: false, foreign_key: true
+      # t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

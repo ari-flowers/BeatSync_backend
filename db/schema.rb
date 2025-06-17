@@ -10,16 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_11_220308) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_13_225215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "jwt_denylists", force: :cascade do |t|
-    t.string "jti"
-    t.datetime "exp"
+  create_table "o_auth_connections", force: :cascade do |t|
+    t.string "provider"
+    t.string "uid"
+    t.string "access_token"
+    t.string "refresh_token"
+    t.datetime "expires_at"
+    t.string "token_type"
+    t.string "scope"
+    t.jsonb "extra_data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
   create_table "playlists", force: :cascade do |t|
@@ -29,10 +34,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_220308) do
     t.boolean "is_public"
     t.string "provider"
     t.string "provider_id"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_playlists_on_user_id"
   end
 
   create_table "tracks", force: :cascade do |t|
@@ -54,25 +57,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_11_220308) do
     t.string "access_token"
     t.string "refresh_token"
     t.datetime "expires_at"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_connections_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-  end
-
-  add_foreign_key "playlists", "users"
   add_foreign_key "tracks", "playlists"
-  add_foreign_key "user_connections", "users"
 end

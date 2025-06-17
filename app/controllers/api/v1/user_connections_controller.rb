@@ -1,12 +1,11 @@
 module Api
   module V1
     class UserConnectionsController < ApplicationController
-      before_action :authenticate_user!
       before_action :set_user_connection, only: [:show, :update, :destroy]
 
       # GET /api/v1/user_connections
       def index
-        @user_connections = current_user.user_connections
+        @user_connections = UserConnection.all
         render json: @user_connections
       end
 
@@ -17,7 +16,7 @@ module Api
 
       # POST /api/v1/user_connections
       def create
-        @user_connection = current_user.user_connections.new(user_connection_params)
+        @user_connection = UserConnection.new(user_connection_params)
         if @user_connection.save
           render json: @user_connection, status: :created
         else
@@ -43,11 +42,11 @@ module Api
       private
 
       def set_user_connection
-        @user_connection = current_user.user_connections.find(params[:id])
+        @user_connection = UserConnection.find(params[:id])
       end
 
       def user_connection_params
-        params.require(:user_connection).permit(:provider, :access_token, :refresh_token, :token_expires_at)
+        params.require(:user_connection).permit(:provider, :uid, :access_token, :refresh_token, :expires_at)
       end
     end
   end

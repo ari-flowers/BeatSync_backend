@@ -41,9 +41,9 @@ gem "dotenv-rails", groups: [:development, :test]
 
 gem 'active_model_serializers', '~> 0.10.0'
 
-gem 'devise'
+# gem 'devise'
 
-gem 'devise-jwt'
+# gem 'devise-jwt'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

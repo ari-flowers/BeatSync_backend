@@ -1,3 +1,3 @@
 class UserConnectionSerializer < ActiveModel::Serializer
-  attributes :id, :provider, :uid, :user_id
+  attributes :id, :provider, :uid
 end

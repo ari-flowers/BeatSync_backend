@@ -7,7 +7,7 @@ class CreatePlaylists < ActiveRecord::Migration[7.1]
       t.boolean :is_public
       t.string :provider
       t.string :provider_id
-      t.references :user, null: false, foreign_key: true
+      # t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

@@ -1,12 +1,11 @@
 module Api
   module V1
     class PlaylistsController < ApplicationController
-      before_action :authenticate_user!
       before_action :set_playlist, only: [:show, :update, :destroy]
 
       # GET /api/v1/playlists
       def index
-        @playlists = current_user.playlists
+        @playlists = Playlist.all
         render json: @playlists
       end
 
@@ -17,7 +16,7 @@ module Api
 
       # POST /api/v1/playlists
       def create
-        @playlist = current_user.playlists.new(playlist_params)
+        @playlist = Playlist.new(playlist_params)
         if @playlist.save
           render json: @playlist, status: :created
         else
@@ -43,7 +42,7 @@ module Api
       private
 
       def set_playlist
-        @playlist = current_user.playlists.find(params[:id])
+        @playlist = Playlist.find(params[:id])
       end
 
       def playlist_params
